@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from "react";
+import { ChakraProvider } from "@chakra-ui/react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import Menu from "./common/Menu";
+import PageWrapper from "./layout/PageWrapper";
+import Home from "./components/Home";
+import Signup from "./components/Signup";
+import Mobilemenu from "./common/Mobilemenu";
+import Header from "./common/Header";
 
 function App() {
   const [state, setstate] = useState(window.innerWidth);
@@ -15,16 +20,23 @@ function App() {
     // Remove event listener on cleanup
     return () => window.removeEventListener("resize", handleResize);
   }, [window]);
-
   return (
     <>
-      <Router>
-        <Switch>
-          <Route exact path="/">
-            {state < 720 ? <Menu color="blue" /> : <div>fullwidth</div>};
-          </Route>
-        </Switch>
-      </Router>
+      <ChakraProvider>
+        <PageWrapper>
+          <Router>
+            {state < 720 ? <Mobilemenu /> : <Header />};
+            <Switch>
+              <Route exact path="/">
+                <Home />
+              </Route>
+              <Route exact path="/signup">
+                <Signup />
+              </Route>
+            </Switch>
+          </Router>
+        </PageWrapper>
+      </ChakraProvider>
     </>
   );
 }
